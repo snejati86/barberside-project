@@ -57,4 +57,14 @@ public class CustomerCursor extends AbstractCursor implements CustomerModel {
         Long res = getLongOrNull(CustomerColumns.PHONE);
         return res;
     }
+
+    /**
+     * Time signed up
+     */
+    public long getSigned() {
+        Long res = getLongOrNull(CustomerColumns.SIGNED);
+        if (res == null)
+            throw new NullPointerException("The value of 'signed' in the database was null, which is not allowed according to the model definition");
+        return res;
+    }
 }

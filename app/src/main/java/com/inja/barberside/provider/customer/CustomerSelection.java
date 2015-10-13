@@ -195,4 +195,44 @@ public class CustomerSelection extends AbstractSelection<CustomerSelection> {
         orderBy(CustomerColumns.PHONE, false);
         return this;
     }
+
+    public CustomerSelection signed(long... value) {
+        addEquals(CustomerColumns.SIGNED, toObjectArray(value));
+        return this;
+    }
+
+    public CustomerSelection signedNot(long... value) {
+        addNotEquals(CustomerColumns.SIGNED, toObjectArray(value));
+        return this;
+    }
+
+    public CustomerSelection signedGt(long value) {
+        addGreaterThan(CustomerColumns.SIGNED, value);
+        return this;
+    }
+
+    public CustomerSelection signedGtEq(long value) {
+        addGreaterThanOrEquals(CustomerColumns.SIGNED, value);
+        return this;
+    }
+
+    public CustomerSelection signedLt(long value) {
+        addLessThan(CustomerColumns.SIGNED, value);
+        return this;
+    }
+
+    public CustomerSelection signedLtEq(long value) {
+        addLessThanOrEquals(CustomerColumns.SIGNED, value);
+        return this;
+    }
+
+    public CustomerSelection orderBySigned(boolean desc) {
+        orderBy(CustomerColumns.SIGNED, desc);
+        return this;
+    }
+
+    public CustomerSelection orderBySigned() {
+        orderBy(CustomerColumns.SIGNED, false);
+        return this;
+    }
 }

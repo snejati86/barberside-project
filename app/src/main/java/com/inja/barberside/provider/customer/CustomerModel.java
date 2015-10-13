@@ -30,4 +30,9 @@ public interface CustomerModel extends BaseModel {
      */
     @Nullable
     Long getPhone();
+
+    /**
+     * Time signed up
+     */
+    long getSigned();
 }

@@ -9,6 +9,8 @@ import com.inja.barberside.R;
 import com.inja.barberside.provider.customer.CustomerColumns;
 import com.inja.barberside.provider.customer.CustomerContentValues;
 
+import java.util.Date;
+
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Object> {
 
@@ -18,11 +20,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getLoaderManager().initLoader(0,null,this);
+        getLoaderManager().initLoader(0, null, this);
         CustomerContentValues values = new CustomerContentValues();
         values.putBarber("Barber 1");
         values.putName("Mine");
         values.putPhone(8589994421L);
+        values.putSigned(new Date().getTime());
         this.getContentResolver().insert(CustomerColumns.CONTENT_URI, values.values());
 
     }

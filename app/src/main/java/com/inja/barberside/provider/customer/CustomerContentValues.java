@@ -69,4 +69,13 @@ public class CustomerContentValues extends AbstractContentValues {
         mContentValues.putNull(CustomerColumns.PHONE);
         return this;
     }
+
+    /**
+     * Time signed up
+     */
+    public CustomerContentValues putSigned(long value) {
+        mContentValues.put(CustomerColumns.SIGNED, value);
+        return this;
+    }
+
 }

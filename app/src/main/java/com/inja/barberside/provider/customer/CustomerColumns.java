@@ -32,6 +32,11 @@ public class CustomerColumns implements BaseColumns {
      */
     public static final String PHONE = "Phone";
 
+    /**
+     * Time signed up
+     */
+    public static final String SIGNED = "Signed";
+
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
@@ -40,7 +45,8 @@ public class CustomerColumns implements BaseColumns {
             _ID,
             NAME,
             BARBER,
-            PHONE
+            PHONE,
+            SIGNED
     };
     // @formatter:on
 
@@ -50,6 +56,7 @@ public class CustomerColumns implements BaseColumns {
             if (c.equals(NAME) || c.contains("." + NAME)) return true;
             if (c.equals(BARBER) || c.contains("." + BARBER)) return true;
             if (c.equals(PHONE) || c.contains("." + PHONE)) return true;
+            if (c.equals(SIGNED) || c.contains("." + SIGNED)) return true;
         }
         return false;
     }

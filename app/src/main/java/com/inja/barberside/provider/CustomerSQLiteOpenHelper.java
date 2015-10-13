@@ -20,27 +20,28 @@ public class CustomerSQLiteOpenHelper extends SQLiteOpenHelper {
             + CustomerColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + CustomerColumns.NAME + " TEXT NOT NULL, "
             + CustomerColumns.BARBER + " TEXT NOT NULL, "
-            + CustomerColumns.PHONE + " INTEGER "
+            + CustomerColumns.PHONE + " INTEGER, "
+            + CustomerColumns.SIGNED + " INTEGER NOT NULL "
             + " );";
     private static final String TAG = CustomerSQLiteOpenHelper.class.getSimpleName();
     private static final int DATABASE_VERSION = 1;
     private static CustomerSQLiteOpenHelper sInstance;
     private final Context mContext;
-    private final SQLiteOpenHelperCallbacks mOpenHelperCallbacks;
+    private final CustomerSQLiteOpenHelperCallbacks mOpenHelperCallbacks;
 
     // @formatter:on
 
     private CustomerSQLiteOpenHelper(Context context) {
         super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
         mContext = context;
-        mOpenHelperCallbacks = new SQLiteOpenHelperCallbacks();
+        mOpenHelperCallbacks = new CustomerSQLiteOpenHelperCallbacks();
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private CustomerSQLiteOpenHelper(Context context, DatabaseErrorHandler errorHandler) {
         super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, errorHandler);
         mContext = context;
-        mOpenHelperCallbacks = new SQLiteOpenHelperCallbacks();
+        mOpenHelperCallbacks = new CustomerSQLiteOpenHelperCallbacks();
     }
 
     public static CustomerSQLiteOpenHelper getInstance(Context context) {
