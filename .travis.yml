@@ -1,0 +1,16 @@
+language: android
+jdk: oraclejdk7
+env:
+  global:
+    - ANDROID_API_LEVEL=android-21
+    - ANDROID_ABI=armeabi-v7a
+
+android:
+  components:
+    - build-tools-23.0.0
+  licenses:
+    - android-sdk-license-5be876d5 # new license!
+    - '.*intel.+'
+
+script:
+  - ./gradlew testDebugUnitTest
