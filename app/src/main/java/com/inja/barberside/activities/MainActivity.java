@@ -1,9 +1,9 @@
 package com.inja.barberside.activities;
 
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.inja.barberside.R;
 import com.inja.barberside.provider.customer.CustomerColumns;
@@ -12,7 +12,7 @@ import com.inja.barberside.provider.customer.CustomerContentValues;
 import java.util.Date;
 
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Object> {
+public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Object> {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
