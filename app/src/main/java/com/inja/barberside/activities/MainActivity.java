@@ -21,8 +21,13 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView recyclerView;
-
     private MyListCursorAdapter adapter;
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getLoaderManager().destroyLoader(1);
+    }
 
     @Override
     protected void onStart() {
