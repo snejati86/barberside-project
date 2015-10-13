@@ -11,6 +11,7 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.fail;
 
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
@@ -40,4 +41,23 @@ public class MainActivityTest {
     {
         assertNotNull(mainActivity.findViewById(R.id.customer_barber));
     }
+
+    @Test
+    public void testCustomerInsert()
+    {
+        fail();
+    }
+
+    @Test
+    public void testCustomerTimeSort()
+    {
+        fail();
+    }
+
+    @Test
+    public void testCustomerUpdateReflectsOnList()
+    {
+        fail();
+    }
+
 }
