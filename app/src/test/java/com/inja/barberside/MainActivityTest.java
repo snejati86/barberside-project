@@ -30,6 +30,9 @@ public class MainActivityTest {
         mainActivity.finish();
     }
 
+    /**
+     * Test.
+     */
     @Test
     public void testActivityShowsAllElements()
     {
