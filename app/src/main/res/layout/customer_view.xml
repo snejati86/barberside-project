@@ -16,7 +16,6 @@
                 android:layout_alignParentTop="true"
                 android:fontFamily="sans-serif-thin"
                 android:padding="5dp"
-                android:text="Name"
                 android:textSize="30sp"/>
             <TextView
                 android:id="@+id/customer_barber"
@@ -25,8 +24,7 @@
                 android:layout_below="@id/customer_name"
                 android:fontFamily="sans-serif-thin"
                 android:padding="5dp"
-                android:text="Barber"
-                android:textSize="30sp"/>
+                android:textSize="20sp"/>
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

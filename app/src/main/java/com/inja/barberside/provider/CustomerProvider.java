@@ -58,24 +58,28 @@ public class CustomerProvider extends BaseContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         if (DEBUG) Log.d(TAG, "insert uri=" + uri + " values=" + values);
+        //getContext().getContentResolver().notifyChange(uri, null);
         return super.insert(uri, values);
     }
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
         if (DEBUG) Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
+       // getContext().getContentResolver().notifyChange(uri, null);
         return super.bulkInsert(uri, values);
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         if (DEBUG) Log.d(TAG, "update uri=" + uri + " values=" + values + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
+      //  getContext().getContentResolver().notifyChange(uri, null);
         return super.update(uri, values, selection, selectionArgs);
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         if (DEBUG) Log.d(TAG, "delete uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
+       // getContext().getContentResolver().notifyChange(uri, null);
         return super.delete(uri, selection, selectionArgs);
     }
 
@@ -84,7 +88,10 @@ public class CustomerProvider extends BaseContentProvider {
         if (DEBUG)
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + uri.getQueryParameter(QUERY_GROUP_BY) + " having=" + uri.getQueryParameter(QUERY_HAVING) + " limit=" + uri.getQueryParameter(QUERY_LIMIT));
-        return super.query(uri, projection, selection, selectionArgs, sortOrder);
+
+        Cursor c =  super.query(uri, projection, selection, selectionArgs, sortOrder);
+       // c.setNotificationUri(getContext().getContentResolver(),uri);
+        return c;
     }
 
     @Override
