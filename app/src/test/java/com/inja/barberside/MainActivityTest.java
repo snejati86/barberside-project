@@ -60,4 +60,10 @@ public class MainActivityTest {
         fail();
     }
 
+    @Test
+    public void testCustomerDeletionReflects()
+    {
+        fail();
+    }
+
 }
