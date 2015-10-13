@@ -10,6 +10,8 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
+import static junit.framework.Assert.assertNotNull;
+
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
  */
@@ -36,6 +38,6 @@ public class MainActivityTest {
     @Test
     public void testActivityShowsAllElements()
     {
-        mainActivity.findViewById(R.id.customer_barber);
+        assertNotNull(mainActivity.findViewById(R.id.customer_barber));
     }
 }
