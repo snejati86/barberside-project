@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">barberside</string>
+    <string name="name_input_hint">Enter Name</string>
+    <string name="phone_input_hint">Phone number</string>
+
+    <string-array name="barbers_list">
+        <item>Roger</item>
+        <item>Marvin</item>
+        <item>Jinan</item>
+    </string-array>
 </resources>

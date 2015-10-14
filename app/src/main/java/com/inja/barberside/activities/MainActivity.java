@@ -6,14 +6,15 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.inja.barberside.R;
 import com.inja.barberside.adapters.DividerItemDecoration;
 import com.inja.barberside.adapters.MyListCursorAdapter;
 import com.inja.barberside.provider.customer.CustomerColumns;
-
 
 
 public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -22,6 +23,11 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 
     private RecyclerView recyclerView;
     private MyListCursorAdapter adapter;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     @Override
     protected void onStop() {
@@ -43,7 +49,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
                 customerContentValues.putSigned(new Date().getTime());
                 customerContentValues.putPhone(854544L);
                 customerContentValues.putBarber("Barberera");
-                getContentResolver().insert(CustomerColumns.CONTENT_URI,customerContentValues.values());
+                getContentResolver().insert(CustomerColumns.CONTENT_URI, customerContentValues.values());
                 handler.postDelayed(this, 5000);
             }
         }, 1000);*/
@@ -61,10 +67,18 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         selection[1] = CustomerColumns.BARBER;
         selection[2] = CustomerColumns.SIGNED;
         selection[3] = CustomerColumns._ID;
-        Cursor customerCursor = this.getContentResolver().query(CustomerColumns.CONTENT_URI,selection,null,null,null);
+        final Cursor customerCursor = this.getContentResolver().query(CustomerColumns.CONTENT_URI,selection,null,null,null);
         adapter = new MyListCursorAdapter(this, customerCursor);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomerDialog customerDialog = new CustomerDialog();
+                customerDialog.show(getFragmentManager(), "C");
+            }
+        });
 
     }
 
