@@ -4,6 +4,7 @@
     <string name="phone_input_hint">Phone number</string>
 
     <string-array name="barbers_list">
+        <item>Choose your guy</item>
         <item>Roger</item>
         <item>Marvin</item>
         <item>Jinan</item>
