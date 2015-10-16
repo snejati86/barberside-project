@@ -1,5 +1,6 @@
 package com.inja.barberside.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -25,9 +26,17 @@ import java.util.Date;
  */
 public class CustomerDialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
+    private MainActivity parent;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        parent = (MainActivity) activity;
+        super.onAttach(activity);
     }
 
     @Override
@@ -51,15 +60,24 @@ public class CustomerDialog extends DialogFragment implements AdapterView.OnItem
         builder.setPositiveButton("ADD ME", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                CustomerContentValues customerContentValues = new CustomerContentValues();
+                final CustomerContentValues customerContentValues = new CustomerContentValues();
                 TextView textView = (TextView)inflated.findViewById(R.id.input_name);
                 customerContentValues.putName(textView.getText().toString());
                 Spinner spinner = ( Spinner )inflated.findViewById(R.id.barber_spinner);
                 customerContentValues.putBarber(spinner.getSelectedItem().toString());
                 customerContentValues.putSigned(new Date().getTime());
                 TextView phone = (TextView) inflated.findViewById(R.id.input_phone);
-                customerContentValues.putPhone(Long.valueOf(phone.getText().toString().replace("-","")));
-                getActivity().getContentResolver().insert(CustomerColumns.CONTENT_URI, customerContentValues.values());
+                customerContentValues.putPhone(Long.valueOf(phone.getText().toString().replace("-", "")));
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Confirmation")
+                        .setMessage(textView.getText().toString()+" with "+spinner.getSelectedItem().toString()+" at number "+phone.getText().toString())
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                parent.getContentResolver().insert(CustomerColumns.CONTENT_URI, customerContentValues.values());}
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
 
             }
         });

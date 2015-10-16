@@ -34,6 +34,16 @@
                 android:src="@drawable/ic_add_black"
                 app:backgroundTint="#ae1111"
                 />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/keypad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="10dp"
+
+                android:src="@drawable/keypad"
+                app:backgroundTint="#276eac"
+                />
 
         </FrameLayout>
 

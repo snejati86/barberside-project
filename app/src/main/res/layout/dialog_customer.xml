@@ -38,7 +38,7 @@
             android:id="@+id/input_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/phone_input_hint"
+            android:hint="If you add a phone number, we will text you when it's close to your turn"
             android:inputType="phone" />
 
     </android.support.design.widget.TextInputLayout>
