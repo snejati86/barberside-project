@@ -5,26 +5,29 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.inja.barberside.R;
 import com.inja.barberside.adapters.DividerItemDecoration;
 import com.inja.barberside.adapters.MyListCursorAdapter;
 import com.inja.barberside.provider.customer.CustomerColumns;
 
+import java.lang.reflect.Field;
+
 
 public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
+    private static final int LOADER_IDENTITY = 1;
     private RecyclerView recyclerView;
     private MyListCursorAdapter adapter;
+    private TextView marquee;
 
     @Override
     protected void onDestroy() {
@@ -34,28 +37,13 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     @Override
     protected void onStop() {
         super.onStop();
-        getLoaderManager().destroyLoader(1);
+        getLoaderManager().destroyLoader(LOADER_IDENTITY);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        getLoaderManager().initLoader(1, null, this);
-/*        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something after 100ms
-                CustomerContentValues customerContentValues = new CustomerContentValues();
-                customerContentValues.putName("SINA 2");
-                customerContentValues.putSigned(new Date().getTime());
-                customerContentValues.putPhone(854544L);
-                customerContentValues.putBarber("Barberera");
-                getContentResolver().insert(CustomerColumns.CONTENT_URI, customerContentValues.values());
-                handler.postDelayed(this, 5000);
-            }
-        }, 1000);*/
-
+        getLoaderManager().initLoader(LOADER_IDENTITY, null, this);
     }
 
     @Override
@@ -63,54 +51,28 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.customer_list);
+        marquee = (TextView) findViewById(R.id.marquee_text);
+        marquee.setSelected(true);
+        setMarqueeSpeed(marquee, 1000f, true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        String[] selection = new String[4];
-        selection[0] = CustomerColumns.NAME;
-        selection[1] = CustomerColumns.BARBER;
-        selection[2] = CustomerColumns.SIGNED;
-        selection[3] = CustomerColumns._ID;
-        final Cursor customerCursor = this.getContentResolver().query(CustomerColumns.CONTENT_URI,selection,null,null,null);
+        final Cursor customerCursor = this.getContentResolver().query(CustomerColumns.CONTENT_URI, customerSelection(), null, null, null);
         adapter = new MyListCursorAdapter(this, customerCursor);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton addCustomerButton = (FloatingActionButton) findViewById(R.id.fab);
+        addCustomerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CustomerDialog customerDialog = new CustomerDialog();
-                customerDialog.show(getFragmentManager(), "C");
+                customerDialog.show(getFragmentManager(), customerDialog.getClass().getSimpleName());
             }
         });
-
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                if ( swipeDir == ItemTouchHelper.RIGHT)
-                {
-                    Log.d(TAG, "Swiped");
-                }
-            }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
 
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        String[] selection = new String[4];
-
-        selection[0] = CustomerColumns.NAME;
-        selection[1] = CustomerColumns.BARBER;
-        selection[2] = CustomerColumns.SIGNED;
-        selection[3] = CustomerColumns._ID;
-        return new CursorLoader(this,CustomerColumns.CONTENT_URI,selection,null,null,null);
-
+        return new CursorLoader(this, CustomerColumns.CONTENT_URI, customerSelection(), null, null, null);
     }
 
     @Override
@@ -124,5 +86,45 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         adapter.swapCursor(null);
 
     }
+
+    private String[] customerSelection() {
+        String[] selection = new String[4];
+
+        selection[0] = CustomerColumns.NAME;
+        selection[1] = CustomerColumns.BARBER;
+        selection[2] = CustomerColumns.SIGNED;
+        selection[3] = CustomerColumns._ID;
+        return selection;
+    }
+
+
+    //FIXME : Doesn't work.
+    private void setMarqueeSpeed(TextView tv, float speed, boolean speedIsMultiplier) {
+
+        try {
+            Field f = tv.getClass().getDeclaredField("mMarquee");
+            f.setAccessible(true);
+
+            Object marquee = f.get(tv);
+            if (marquee != null) {
+
+                String scrollSpeedFieldName = "mScrollUnit";
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    scrollSpeedFieldName = "mPixelsPerSecond";
+
+                Field mf = marquee.getClass().getDeclaredField(scrollSpeedFieldName);
+                mf.setAccessible(true);
+
+                float newSpeed = speed;
+                if (speedIsMultiplier)
+                    newSpeed = mf.getFloat(marquee) * speed;
+
+                mf.setFloat(marquee, newSpeed);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

@@ -43,8 +43,8 @@ public class CustomerDialog extends DialogFragment implements AdapterView.OnItem
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View inflated =inflater.inflate(R.layout.dialog_customer,null);
-        Spinner spinner = (Spinner)inflated.findViewById(R.id.barber_spinner);
+        final View inflated = inflater.inflate(R.layout.dialog_customer, null);
+        Spinner spinner = (Spinner) inflated.findViewById(R.id.barber_spinner);
         spinner.setOnItemSelectedListener(this);
         //spinner.setOnItemClickListener(this);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
@@ -60,25 +60,35 @@ public class CustomerDialog extends DialogFragment implements AdapterView.OnItem
         builder.setPositiveButton("ADD ME", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final CustomerContentValues customerContentValues = new CustomerContentValues();
-                TextView textView = (TextView)inflated.findViewById(R.id.input_name);
-                customerContentValues.putName(textView.getText().toString());
-                Spinner spinner = ( Spinner )inflated.findViewById(R.id.barber_spinner);
-                customerContentValues.putBarber(spinner.getSelectedItem().toString());
-                customerContentValues.putSigned(new Date().getTime());
-                TextView phone = (TextView) inflated.findViewById(R.id.input_phone);
-                customerContentValues.putPhone(Long.valueOf(phone.getText().toString().replace("-", "")));
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("Confirmation")
-                        .setMessage(textView.getText().toString()+" with "+spinner.getSelectedItem().toString()+" at number "+phone.getText().toString())
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                if (validateInput()) {
+                    final CustomerContentValues customerContentValues = new CustomerContentValues();
+                    TextView textView = (TextView) inflated.findViewById(R.id.input_name);
+                    customerContentValues.putName(textView.getText().toString());
+                    Spinner spinner = (Spinner) inflated.findViewById(R.id.barber_spinner);
+                    customerContentValues.putBarber(spinner.getSelectedItem().toString());
+                    customerContentValues.putSigned(new Date().getTime());
+                    TextView phone = (TextView) inflated.findViewById(R.id.input_phone);
+                    customerContentValues.putPhone(Long.valueOf(phone.getText().toString().replace("-", "")));
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Confirmation")
+                            .setMessage(textView.getText().toString() + " with " + spinner.getSelectedItem().toString() + " at number " + phone.getText().toString())
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                parent.getContentResolver().insert(CustomerColumns.CONTENT_URI, customerContentValues.values());}
-                        })
-                        .setNegativeButton(android.R.string.no, null).show();
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    parent.getContentResolver().insert(CustomerColumns.CONTENT_URI, customerContentValues.values());
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null).show();
 
+                }
+                else{
+                    //ERROR CHECK.
+                }
+            }
+
+            private boolean validateInput() {
+                return true;
             }
         });
         return builder.create();

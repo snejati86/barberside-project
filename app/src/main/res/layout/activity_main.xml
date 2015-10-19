@@ -48,10 +48,24 @@
         </FrameLayout>
 
     </LinearLayout>
+    <TextView
+        android:id="@+id/marquee_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#000"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:fontFamily="sans-serif"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="Jinan wait time 45mins | Jinan wait time 45mins |Jinan wait time 45mins |Jinan wait time 45mins |Jinan wait time 45mins |Jinan wait time 45mins |Jinan wait time 45mins |"
+        android:textColor="#fff"
+        android:textSize="30sp"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/customer_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.7"
+        android:layout_weight="1.6"
         android:scrollbars="vertical"/>
 </LinearLayout>
