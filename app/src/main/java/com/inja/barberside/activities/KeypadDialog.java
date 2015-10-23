@@ -8,13 +8,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
 import com.inja.barberside.R;
 
@@ -25,6 +23,7 @@ public class KeypadDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(0));
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -33,7 +32,7 @@ public class KeypadDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View inflated = inflater.inflate(R.layout.dialog_keypad, null);
-        View keypad = inflated.findViewById(R.id.digital_pad);
+
         final EditText password = (EditText) inflated.findViewById(R.id.password_text);
         password.addTextChangedListener(new TextWatcher() {
             @Override
@@ -43,8 +42,7 @@ public class KeypadDialog extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if ( s.length() == 4 ){
-                    String password = s.toString();
+                if (s.length() == 4) {
                     KeypadDialog.this.dismiss();
                 }
             }
@@ -54,7 +52,78 @@ public class KeypadDialog extends DialogFragment {
 
             }
         });
-        keypad.setOnTouchListener(new View.OnTouchListener() {
+        ImageButton imageButton1 = (ImageButton)inflated.findViewById(R.id.button_one);
+        imageButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                password.append("1");
+            }
+        });
+        ImageButton imageButton2 = (ImageButton)inflated.findViewById(R.id.button_two);
+        imageButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                password.append("2");
+            }
+        });
+        ImageButton imageButton3 = (ImageButton)inflated.findViewById(R.id.button_three);
+        imageButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                password.append("3");
+            }
+        });
+        ImageButton imageButton4 = (ImageButton)inflated.findViewById(R.id.button_four);
+        imageButton4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                password.append("4");
+            }
+        });
+        ImageButton imageButton5 = (ImageButton)inflated.findViewById(R.id.button_five);
+        imageButton5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                password.append("5");
+            }
+        });
+        ImageButton imageButton6 = (ImageButton)inflated.findViewById(R.id.button_six);
+        imageButton6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                password.append("6");
+            }
+        });
+        ImageButton imageButton7 = (ImageButton)inflated.findViewById(R.id.button_seven);
+        imageButton7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                password.append("7");
+            }
+        });
+        ImageButton imageButton8 = (ImageButton)inflated.findViewById(R.id.button_eight);
+        imageButton8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                password.append("8");
+            }
+        });
+        ImageButton imageButton9 = (ImageButton)inflated.findViewById(R.id.button_nine);
+        imageButton9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                password.append("9");
+            }
+        });
+        ImageButton imageButton0 = (ImageButton)inflated.findViewById(R.id.button_zero);
+        imageButton0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                password.append("0");
+            }
+        });
+
+/*        keypad.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction())
@@ -121,7 +190,7 @@ public class KeypadDialog extends DialogFragment {
                 }
                 return true;
             }
-        });
+        });*/
         builder.setView(inflated);
         return builder.create();
 

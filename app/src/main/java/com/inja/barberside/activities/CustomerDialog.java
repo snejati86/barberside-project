@@ -15,6 +15,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.inja.barberside.R;
+import com.inja.barberside.provider.barber.BarberCursor;
+import com.inja.barberside.provider.barber.BarberSelection;
 import com.inja.barberside.provider.customer.CustomerColumns;
 import com.inja.barberside.provider.customer.CustomerContentValues;
 
@@ -65,7 +67,11 @@ public class CustomerDialog extends DialogFragment implements AdapterView.OnItem
                     TextView textView = (TextView) inflated.findViewById(R.id.input_name);
                     customerContentValues.putName(textView.getText().toString());
                     Spinner spinner = (Spinner) inflated.findViewById(R.id.barber_spinner);
-                    customerContentValues.putBarber(spinner.getSelectedItem().toString());
+                    BarberSelection barberSelection = new BarberSelection();
+                    barberSelection.nameLike(spinner.getSelectedItem().toString());
+                    BarberCursor barberCursor = barberSelection.query(getActivity().getContentResolver());
+                    barberCursor.moveToFirst();
+                    customerContentValues.putBarber(barberCursor.getId());
                     customerContentValues.putSigned(new Date().getTime());
                     TextView phone = (TextView) inflated.findViewById(R.id.input_phone);
                     customerContentValues.putPhone(Long.valueOf(phone.getText().toString().replace("-", "")));

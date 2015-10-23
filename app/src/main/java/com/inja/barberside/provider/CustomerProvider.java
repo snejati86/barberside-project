@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.inja.barberside.BuildConfig;
+import com.inja.barberside.provider.barber.BarberColumns;
 import com.inja.barberside.provider.base.BaseContentProvider;
 import com.inja.barberside.provider.customer.CustomerColumns;
 
@@ -20,14 +21,19 @@ public class CustomerProvider extends BaseContentProvider {
     private static final boolean DEBUG = BuildConfig.DEBUG;
     private static final String TYPE_CURSOR_ITEM = "vnd.android.cursor.item/";
     private static final String TYPE_CURSOR_DIR = "vnd.android.cursor.dir/";
-    private static final int URI_TYPE_CUSTOMER = 0;
-    private static final int URI_TYPE_CUSTOMER_ID = 1;
+    private static final int URI_TYPE_BARBER = 0;
+    private static final int URI_TYPE_BARBER_ID = 1;
+
+    private static final int URI_TYPE_CUSTOMER = 2;
+    private static final int URI_TYPE_CUSTOMER_ID = 3;
 
 
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
+        URI_MATCHER.addURI(AUTHORITY, BarberColumns.TABLE_NAME, URI_TYPE_BARBER);
+        URI_MATCHER.addURI(AUTHORITY, BarberColumns.TABLE_NAME + "/#", URI_TYPE_BARBER_ID);
         URI_MATCHER.addURI(AUTHORITY, CustomerColumns.TABLE_NAME, URI_TYPE_CUSTOMER);
         URI_MATCHER.addURI(AUTHORITY, CustomerColumns.TABLE_NAME + "/#", URI_TYPE_CUSTOMER_ID);
     }
@@ -46,6 +52,11 @@ public class CustomerProvider extends BaseContentProvider {
     public String getType(Uri uri) {
         int match = URI_MATCHER.match(uri);
         switch (match) {
+            case URI_TYPE_BARBER:
+                return TYPE_CURSOR_DIR + BarberColumns.TABLE_NAME;
+            case URI_TYPE_BARBER_ID:
+                return TYPE_CURSOR_ITEM + BarberColumns.TABLE_NAME;
+
             case URI_TYPE_CUSTOMER:
                 return TYPE_CURSOR_DIR + CustomerColumns.TABLE_NAME;
             case URI_TYPE_CUSTOMER_ID:
@@ -58,28 +69,24 @@ public class CustomerProvider extends BaseContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         if (DEBUG) Log.d(TAG, "insert uri=" + uri + " values=" + values);
-        //getContext().getContentResolver().notifyChange(uri, null);
         return super.insert(uri, values);
     }
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
         if (DEBUG) Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
-       // getContext().getContentResolver().notifyChange(uri, null);
         return super.bulkInsert(uri, values);
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         if (DEBUG) Log.d(TAG, "update uri=" + uri + " values=" + values + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
-      //  getContext().getContentResolver().notifyChange(uri, null);
         return super.update(uri, values, selection, selectionArgs);
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         if (DEBUG) Log.d(TAG, "delete uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
-       // getContext().getContentResolver().notifyChange(uri, null);
         return super.delete(uri, selection, selectionArgs);
     }
 
@@ -88,10 +95,7 @@ public class CustomerProvider extends BaseContentProvider {
         if (DEBUG)
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + uri.getQueryParameter(QUERY_GROUP_BY) + " having=" + uri.getQueryParameter(QUERY_HAVING) + " limit=" + uri.getQueryParameter(QUERY_LIMIT));
-
-        Cursor c =  super.query(uri, projection, selection, selectionArgs, sortOrder);
-       // c.setNotificationUri(getContext().getContentResolver(),uri);
-        return c;
+        return super.query(uri, projection, selection, selectionArgs, sortOrder);
     }
 
     @Override
@@ -100,11 +104,22 @@ public class CustomerProvider extends BaseContentProvider {
         String id = null;
         int matchedId = URI_MATCHER.match(uri);
         switch (matchedId) {
+            case URI_TYPE_BARBER:
+            case URI_TYPE_BARBER_ID:
+                res.table = BarberColumns.TABLE_NAME;
+                res.idColumn = BarberColumns._ID;
+                res.tablesWithJoins = BarberColumns.TABLE_NAME;
+                res.orderBy = BarberColumns.DEFAULT_ORDER;
+                break;
+
             case URI_TYPE_CUSTOMER:
             case URI_TYPE_CUSTOMER_ID:
                 res.table = CustomerColumns.TABLE_NAME;
                 res.idColumn = CustomerColumns._ID;
                 res.tablesWithJoins = CustomerColumns.TABLE_NAME;
+                if (BarberColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + BarberColumns.TABLE_NAME + " AS " + CustomerColumns.PREFIX_BARBER + " ON " + CustomerColumns.TABLE_NAME + "." + CustomerColumns.BARBER + "=" + CustomerColumns.PREFIX_BARBER + "." + BarberColumns._ID;
+                }
                 res.orderBy = CustomerColumns.DEFAULT_ORDER;
                 break;
 
@@ -113,6 +128,7 @@ public class CustomerProvider extends BaseContentProvider {
         }
 
         switch (matchedId) {
+            case URI_TYPE_BARBER_ID:
             case URI_TYPE_CUSTOMER_ID:
                 id = uri.getLastPathSegment();
         }

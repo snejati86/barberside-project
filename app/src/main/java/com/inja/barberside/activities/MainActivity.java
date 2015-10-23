@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.inja.barberside.R;
 import com.inja.barberside.adapters.DividerItemDecoration;
 import com.inja.barberside.adapters.MyListCursorAdapter;
+import com.inja.barberside.provider.barber.BarberColumns;
+import com.inja.barberside.provider.barber.BarberContentValues;
 import com.inja.barberside.provider.customer.CustomerColumns;
 
 import java.lang.reflect.Field;
@@ -58,6 +60,9 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BarberContentValues barberContentValues = new BarberContentValues();
+        barberContentValues.putName("Jinan").putAveragetime(140000L).putPassword(1345);
+        this.getContentResolver().insert(BarberColumns.CONTENT_URI, barberContentValues.values());
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.customer_list);
         marquee = (TextView) findViewById(R.id.marquee_text);
@@ -106,12 +111,13 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     }
 
     private String[] customerSelection() {
-        String[] selection = new String[4];
+        String[] selection = new String[5];
 
         selection[0] = CustomerColumns.NAME;
         selection[1] = CustomerColumns.BARBER;
         selection[2] = CustomerColumns.SIGNED;
         selection[3] = CustomerColumns._ID;
+        selection[4] = BarberColumns.NAME;
         return selection;
     }
 

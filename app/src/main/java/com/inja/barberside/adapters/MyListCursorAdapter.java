@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.inja.barberside.R;
+import com.inja.barberside.provider.barber.BarberColumns;
 import com.inja.barberside.provider.customer.CustomerColumns;
 
 /**
@@ -34,8 +35,9 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorA
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
         int nameIndex = cursor.getColumnIndex(CustomerColumns.NAME);
-        int barberIndex = cursor.getColumnIndex(CustomerColumns.BARBER);
+        int barberIndex = cursor.getColumnIndex(BarberColumns.NAME);
         viewHolder.customerName.setText(cursor.getString(nameIndex));
+
         viewHolder.customerBarber.setText(cursor.getString(barberIndex));
     }
 

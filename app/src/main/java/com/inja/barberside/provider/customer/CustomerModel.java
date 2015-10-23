@@ -19,10 +19,8 @@ public interface CustomerModel extends BaseModel {
 
     /**
      * Barber
-     * Cannot be {@code null}.
      */
-    @NonNull
-    String getBarber();
+    long getBarber();
 
     /**
      * Phone
