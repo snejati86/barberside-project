@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -32,17 +33,26 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG,"Destoryed");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "Resumed");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        Log.d(TAG, "Stopped");
         getLoaderManager().destroyLoader(LOADER_IDENTITY);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "Started");
         getLoaderManager().initLoader(LOADER_IDENTITY, null, this);
     }
 
@@ -65,6 +75,15 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
             public void onClick(View v) {
                 CustomerDialog customerDialog = new CustomerDialog();
                 customerDialog.show(getFragmentManager(), customerDialog.getClass().getSimpleName());
+            }
+        });
+        FloatingActionButton barberButton = (FloatingActionButton )findViewById(R.id.keypad);
+        barberButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                KeypadDialog keypadDialog = new KeypadDialog();
+                keypadDialog.show(getFragmentManager(),keypadDialog.getClass().getSimpleName());
             }
         });
 
@@ -124,6 +143,11 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void updateMarquee()
+    {
+        //TODO : Update the marquee text with new wait times.
     }
 
 

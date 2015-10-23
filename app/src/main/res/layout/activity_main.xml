@@ -48,6 +48,7 @@
         </FrameLayout>
 
     </LinearLayout>
+
     <TextView
         android:id="@+id/marquee_text"
         android:layout_width="fill_parent"
@@ -62,6 +63,14 @@
         android:text="Jinan wait time 45mins | Jinan wait time 45mins |Jinan wait time 45mins |Jinan wait time 45mins |Jinan wait time 45mins |Jinan wait time 45mins |Jinan wait time 45mins |"
         android:textColor="#fff"
         android:textSize="30sp"/>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-thin"
+        android:text="12 Souls waiting"
+        android:textAlignment="center"
+        android:textColor="#642a2a"
+        android:textSize="50sp"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/customer_list"
         android:layout_width="match_parent"
