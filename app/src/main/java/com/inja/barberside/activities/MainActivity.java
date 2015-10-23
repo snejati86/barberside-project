@@ -39,7 +39,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "Resumed");
+        Log.d(TAG,"Resumed");
     }
 
     @Override
@@ -52,7 +52,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "Started");
         getLoaderManager().initLoader(LOADER_IDENTITY, null, this);
     }
 
