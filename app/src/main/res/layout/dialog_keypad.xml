@@ -26,12 +26,14 @@
             android:id="@+id/button_one"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:background="?android:selectableItemBackground"
             android:src="@drawable/button1"/>
         <ImageButton
             android:id="@+id/button_two"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:background="?android:selectableItemBackground"
             android:src="@drawable/button2"/>
         <ImageButton
@@ -44,12 +46,14 @@
             android:id="@+id/button_four"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:background="?android:selectableItemBackground"
             android:src="@drawable/button4"/>
         <ImageButton
             android:id="@+id/button_five"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:background="?android:selectableItemBackground"
             android:src="@drawable/button5"/>
         <ImageButton
@@ -62,12 +66,14 @@
             android:id="@+id/button_seven"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:background="?android:selectableItemBackground"
             android:src="@drawable/button7"/>
         <ImageButton
             android:id="@+id/button_eight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:background="?android:selectableItemBackground"
             android:src="@drawable/button8"/>
         <ImageButton

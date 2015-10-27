@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -19,18 +20,32 @@ import com.inja.barberside.adapters.DividerItemDecoration;
 import com.inja.barberside.adapters.MyListCursorAdapter;
 import com.inja.barberside.provider.barber.BarberColumns;
 import com.inja.barberside.provider.barber.BarberContentValues;
+import com.inja.barberside.provider.barber.BarberCursor;
+import com.inja.barberside.provider.barber.BarberSelection;
 import com.inja.barberside.provider.customer.CustomerColumns;
+import com.inja.barberside.provider.customer.CustomerCursor;
+import com.inja.barberside.provider.customer.CustomerSelection;
 
 import java.lang.reflect.Field;
+import java.util.concurrent.TimeUnit;
 
-
-public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> ,BarberList{
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
     private static final int LOADER_IDENTITY = 1;
+
     private RecyclerView recyclerView;
+
     private MyListCursorAdapter adapter;
+
     private TextView marquee;
+
+    private TextView waitingCount;
+
+    private ItemTouchHelper itemTouchHelper;
+
+    private FloatingActionButton barberButton;
 
     @Override
     protected void onDestroy() {
@@ -41,6 +56,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     @Override
     protected void onResume() {
         super.onResume();
+        //startLockTask();
         Log.d(TAG,"Resumed");
     }
 
@@ -60,19 +76,20 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BarberContentValues barberContentValues = new BarberContentValues();
-        barberContentValues.putName("Jinan").putAveragetime(140000L).putPassword(1345);
-        this.getContentResolver().insert(BarberColumns.CONTENT_URI, barberContentValues.values());
         setContentView(R.layout.activity_main);
+        updateBarbers();
         recyclerView = (RecyclerView) findViewById(R.id.customer_list);
         marquee = (TextView) findViewById(R.id.marquee_text);
+        waitingCount = (TextView) findViewById(R.id.wait_count);
         marquee.setSelected(true);
         setMarqueeSpeed(marquee, 1000f, true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         final Cursor customerCursor = this.getContentResolver().query(CustomerColumns.CONTENT_URI, customerSelection(), null, null, null);
+        waitingCount.setText(String.valueOf(customerCursor.getCount())+" Souls waiting");
         adapter = new MyListCursorAdapter(this, customerCursor);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+
         FloatingActionButton addCustomerButton = (FloatingActionButton) findViewById(R.id.fab);
         addCustomerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +118,8 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
-
+        waitingCount.setText(String.valueOf(data.getCount()) + " Souls waiting");
+        updateMarquee();
     }
 
     @Override
@@ -152,8 +170,119 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 
     private void updateMarquee()
     {
+        marquee.setText("");
+        BarberSelection barberSelection = new BarberSelection();
+        BarberCursor barberCursor = barberSelection.query(getContentResolver());
+        Log.d(TAG,"Size "+barberCursor.getCount());
+        StringBuffer stringBuffer = new StringBuffer();
+        while ( barberCursor.moveToNext())
+        {
+            String barberName = barberCursor.getName();
+            Log.d(TAG,barberName);
+            long waitTime = barberCursor.getAveragetime();
+            CustomerSelection customerSelection = new CustomerSelection();
+            customerSelection.barberName(barberName);
+            int count = customerSelection.query(getContentResolver()).getCount();
+            String time = String.format("%d min",
+                    TimeUnit.MILLISECONDS.toMinutes(waitTime*count)
+            );
+            stringBuffer.append(barberName+" "+time+" | ");
+
+            customerSelection.closeParen();
+        }
+        marquee.setText(stringBuffer);
+        barberCursor.close();
+/*        CustomerSelection customerSelection = new CustomerSelection();
+        customerSelection.barberNameLike("Jinan");
+        int count = customerSelection.query(getContentResolver()).getCount();
+
+
+        BarberSelection barberSelection = new BarberSelection();
+        barberSelection.nameLike("Jinan");
+        BarberCursor barberCursor = barberSelection.query(getContentResolver());
+        barberCursor.moveToFirst();
+        long avg = barberCursor.getAveragetime();
+        long millis = avg * count;
+        String jinanTime = String.format("%d min",
+                TimeUnit.MILLISECONDS.toMinutes(millis)
+        );
+        marquee.setText("Jinan "+jinanTime);
+        barberCursor.close();*/
+
+
         //TODO : Update the marquee text with new wait times.
     }
 
 
+    /**
+     * Adds harcoded barbers.
+     */
+    private void updateBarbers()
+    {
+        getContentResolver().delete(BarberColumns.CONTENT_URI, null, null);
+        BarberContentValues barberContentValues = new BarberContentValues();
+        barberContentValues.putName("Jinan").putAveragetime(60*30*1000).putPassword(1234);
+        this.getContentResolver().insert(BarberColumns.CONTENT_URI, barberContentValues.values());
+        barberContentValues.putName("Marvin").putAveragetime(60 * 25 * 1000).putPassword(4321);
+        this.getContentResolver().insert(BarberColumns.CONTENT_URI, barberContentValues.values());
+        barberContentValues.putName("Roger").putAveragetime(60 * 35 * 1000).putPassword(5555);
+        this.getContentResolver().insert(BarberColumns.CONTENT_URI, barberContentValues.values());
+        barberContentValues.putName("Any barber").putAveragetime(60 * 35 * 1000).putPassword(9999);
+        this.getContentResolver().insert(BarberColumns.CONTENT_URI, barberContentValues.values());
+
+    }
+
+
+    @Override
+    public void barberMode(long barberId) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                if ( direction == ItemTouchHelper.RIGHT  ){
+                    int position = viewHolder.getAdapterPosition();
+/*                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage("phoneNo", null, "sms message", null, null);*/
+                    Log.d(TAG, "Item at" + position);
+                    Cursor cursor = adapter.getCursor();
+                    long id = cursor.getLong(0);
+
+                    //long index = adapter.getCursor()(position);
+                    Log.d(TAG,"Got from adapter "+id);
+                    CustomerSelection customerSelection = new CustomerSelection();
+                    customerSelection.id(id);
+                    int deleted = customerSelection.delete(getContentResolver());
+                    Log.d(TAG," rows deleted "+deleted);
+                    exitBarberMode();
+                }
+
+            }
+        };
+        itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+        CustomerSelection customerSelection = new CustomerSelection();
+        customerSelection.barber(barberId).or().barberNameLike("Any barber").orderBySigned(false);
+        CustomerCursor customerCursor = customerSelection.query(getContentResolver());
+        barberButton = (FloatingActionButton )findViewById(R.id.close_barber);
+        barberButton.setVisibility(View.VISIBLE);
+        barberButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                exitBarberMode();
+            }
+        });
+        adapter.swapCursor(customerCursor);
+    }
+
+    void exitBarberMode() {
+        CustomerSelection customerSelection1 = new CustomerSelection().orderBySigned(false);
+        adapter.swapCursor(customerSelection1.query(getContentResolver()));
+        itemTouchHelper.attachToRecyclerView(null);
+        barberButton.setVisibility(View.INVISIBLE);
+    }
 }

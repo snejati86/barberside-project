@@ -13,8 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.inja.barberside.R;
+import com.inja.barberside.provider.barber.BarberCursor;
+import com.inja.barberside.provider.barber.BarberSelection;
 
 /**
  * Created by nejasix on 10/21/15.
@@ -43,6 +46,19 @@ public class KeypadDialog extends DialogFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 4) {
+                    BarberSelection barberSelection = new BarberSelection();
+                    barberSelection.password(Integer.valueOf(s.toString()));
+                    BarberCursor barberCursor = barberSelection.query(getActivity().getContentResolver());
+
+                    if ( barberCursor.getCount()>0){
+                        barberCursor.moveToFirst();
+                        BarberList barberList = (BarberList) getActivity();
+                        barberList.barberMode(barberCursor.getId());
+                        Toast.makeText(getActivity(),"Found barber "+barberCursor.getName(),Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(getActivity(),"Not found",Toast.LENGTH_SHORT).show();
+                    }
                     KeypadDialog.this.dismiss();
                 }
             }
@@ -123,74 +139,6 @@ public class KeypadDialog extends DialogFragment {
             }
         });
 
-/*        keypad.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction())
-                {
-                    case MotionEvent.ACTION_UP:
-                        //Log.d("THIS",v.getWidth()+" "+v.getHeight());
-                        //Log.d("THIS",event.getX()+" "+event.getY());
-                        float currentX = event.getX();
-                        float currentY = event.getY();
-                        if ( currentX <= v.getWidth()/3 )
-                        {
-                            if ( currentY <= v.getHeight()/ 4)
-                            {
-                                password.append("1");
-                            }
-                            else if (currentY <= (2*v.getHeight())/4 && currentY > v.getHeight()/4)
-                            {
-                                password.append("4");
-                            }
-                            else if ( currentY >= v.getHeight()/2 && currentY < (3*v.getHeight())/4)
-                            {
-                                password.append("7");
-                            }
-
-                        }
-                        else if ( currentX <= (2*v.getWidth())/3 && currentX > v.getWidth()/3)
-                        {
-                            if ( currentY <= v.getHeight()/ 4)
-                            {
-                                password.append("2");
-                            }
-                            else if (currentY <= (2*v.getHeight())/4 && currentY > v.getHeight()/4)
-                            {
-                                password.append("5");
-                            }
-                            else if ( currentY >= v.getHeight()/2 && currentY < (3*v.getHeight())/4)
-                            {
-                                password.append("8");
-                            }
-                            else if ( currentY >= (3*v.getHeight())/4)
-                            {
-                                password.append("0");
-                            }
-
-                        }
-                        else if( currentX > (2*v.getWidth())/3 )
-                        {
-                            if ( currentY <= v.getHeight()/ 4)
-                            {
-                                password.append("3");
-                            }
-                            else if (currentY <= (2*v.getHeight())/4 && currentY > v.getHeight()/4)
-                            {
-                                password.append("6");
-                            }
-                            else if ( currentY >= v.getHeight()/2 && currentY < (3*v.getHeight())/4)
-                            {
-                                password.append("9");
-                            }
-
-                        }
-                        break;
-
-                }
-                return true;
-            }
-        });*/
         builder.setView(inflated);
         return builder.create();
 

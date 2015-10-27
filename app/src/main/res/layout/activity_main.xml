@@ -44,6 +44,16 @@
                 android:src="@drawable/keypad"
                 app:backgroundTint="#276eac"
                 />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/close_barber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/keypad"
+                android:visibility="gone"
+                app:backgroundTint="#42e929"
+                />
 
         </FrameLayout>
 
@@ -60,14 +70,14 @@
         android:fontFamily="sans-serif"
         android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
-        android:text="Jinan wait time 45mins | Jinan wait time 45mins |Jinan wait time 45mins |Jinan wait time 45mins |Jinan wait time 45mins |Jinan wait time 45mins |Jinan wait time 45mins |"
         android:textColor="#fff"
         android:textSize="30sp"/>
     <TextView
+        android:id="@+id/wait_count"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-thin"
-        android:text="12 Souls waiting"
+        android:text="0 Souls waiting"
         android:textAlignment="center"
         android:textColor="#642a2a"
         android:textSize="50sp"/>
