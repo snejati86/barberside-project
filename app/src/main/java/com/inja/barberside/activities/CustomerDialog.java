@@ -24,7 +24,7 @@ import java.util.Date;
 
 
 /**
- * Created by sinasix on 10/13/15.
+ * This main
  */
 public class CustomerDialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
@@ -50,7 +50,7 @@ public class CustomerDialog extends DialogFragment implements AdapterView.OnItem
         spinner.setOnItemSelectedListener(this);
         //spinner.setOnItemClickListener(this);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.barbers_list, android.R.layout.simple_spinner_item);
+                R.array.barbers_list, android.R.layout.simple_spinner_dropdown_item);
 // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
@@ -59,7 +59,8 @@ public class CustomerDialog extends DialogFragment implements AdapterView.OnItem
         phoneNumber.addTextChangedListener(new PhoneNumberTextWatcher());
         phoneNumber.setFilters(new InputFilter[]{new PhoneNumberFilter(), new InputFilter.LengthFilter(12)});
         builder.setView(inflated);
-        builder.setPositiveButton("ADD ME", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("ADD ME", new DialogInterface.OnClickListener()
+        {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (validateInput()) {
@@ -86,7 +87,6 @@ public class CustomerDialog extends DialogFragment implements AdapterView.OnItem
                                 }
                             })
                             .setNegativeButton(android.R.string.no, null).show();
-
                 }
                 else{
                     //ERROR CHECK.

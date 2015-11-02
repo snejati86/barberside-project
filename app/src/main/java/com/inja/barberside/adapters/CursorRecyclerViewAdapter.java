@@ -119,7 +119,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
             if (mDataSetObserver != null) {
                 mCursor.registerDataSetObserver(mDataSetObserver);
             }
-            mRowIdColumn = newCursor.getColumnIndexOrThrow("_id");
+            mRowIdColumn = 0;
             mDataValid = true;
             notifyDataSetChanged();
         } else {

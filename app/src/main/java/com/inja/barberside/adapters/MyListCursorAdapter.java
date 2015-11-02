@@ -37,7 +37,6 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorA
         int nameIndex = cursor.getColumnIndex(CustomerColumns.NAME);
         int barberIndex = cursor.getColumnIndex(BarberColumns.NAME);
         viewHolder.customerName.setText(cursor.getString(nameIndex));
-
         viewHolder.customerBarber.setText(cursor.getString(barberIndex));
     }
 

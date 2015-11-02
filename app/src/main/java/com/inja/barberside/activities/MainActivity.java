@@ -31,21 +31,55 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> ,BarberList{
 
+    /**
+     * Tag used for logging.
+     */
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    /**
+     * Loader identity.
+     */
     private static final int LOADER_IDENTITY = 1;
 
+    /**
+     * Recycler view.
+     */
     private RecyclerView recyclerView;
 
-    private MyListCursorAdapter adapter;
-
+    /**
+     * Marquee to display the name of barbers.
+     */
     private TextView marquee;
 
+    /**
+     * Total number of people waiting.
+     */
     private TextView waitingCount;
 
-    private ItemTouchHelper itemTouchHelper;
+    /**
+     * Button to exit barber mode.
+     */
+    private FloatingActionButton exitBarberModeButton;
 
-    private FloatingActionButton barberButton;
+    /**
+     * Button to add customer;
+     */
+    private FloatingActionButton addCustomerButton;
+
+    /**
+     * Key pad
+     */
+    private FloatingActionButton enterBarberModeButton;
+
+    /**
+     * Custom cursor adapter.
+     */
+    private MyListCursorAdapter adapter;
+
+    /**
+     * Item touch helper for swiping ,
+     */
+    private ItemTouchHelper itemTouchHelper;
 
     @Override
     protected void onDestroy() {
@@ -77,20 +111,26 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initUIComponents();
+        final Cursor customerCursor = this.getContentResolver().query(CustomerColumns.CONTENT_URI, customerSelection(), null, null, null);
+        waitingCount.setText(String.valueOf(customerCursor.getCount())+" Souls waiting");
+        adapter = new MyListCursorAdapter(this, customerCursor);
+        recyclerView.setAdapter(adapter);
         updateBarbers();
+
+
+    }
+
+    private void initUIComponents() {
         recyclerView = (RecyclerView) findViewById(R.id.customer_list);
         marquee = (TextView) findViewById(R.id.marquee_text);
         waitingCount = (TextView) findViewById(R.id.wait_count);
         marquee.setSelected(true);
         setMarqueeSpeed(marquee, 1000f, true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final Cursor customerCursor = this.getContentResolver().query(CustomerColumns.CONTENT_URI, customerSelection(), null, null, null);
-        waitingCount.setText(String.valueOf(customerCursor.getCount())+" Souls waiting");
-        adapter = new MyListCursorAdapter(this, customerCursor);
-        recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
-        FloatingActionButton addCustomerButton = (FloatingActionButton) findViewById(R.id.fab);
+        addCustomerButton = (FloatingActionButton) findViewById(R.id.fab);
         addCustomerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,8 +138,8 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
                 customerDialog.show(getFragmentManager(), customerDialog.getClass().getSimpleName());
             }
         });
-        FloatingActionButton barberButton = (FloatingActionButton )findViewById(R.id.keypad);
-        barberButton.setOnClickListener(new View.OnClickListener(){
+        enterBarberModeButton = (FloatingActionButton )findViewById(R.id.keypad);
+        enterBarberModeButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
@@ -107,7 +147,15 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
                 keypadDialog.show(getFragmentManager(),keypadDialog.getClass().getSimpleName());
             }
         });
+        exitBarberModeButton = (FloatingActionButton )findViewById(R.id.close_barber);
 
+        exitBarberModeButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                exitBarberMode();
+            }
+        });
     }
 
     @Override
@@ -187,35 +235,16 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
                     TimeUnit.MILLISECONDS.toMinutes(waitTime*count)
             );
             stringBuffer.append(barberName+" "+time+" | ");
-
             customerSelection.closeParen();
         }
         marquee.setText(stringBuffer);
         barberCursor.close();
-/*        CustomerSelection customerSelection = new CustomerSelection();
-        customerSelection.barberNameLike("Jinan");
-        int count = customerSelection.query(getContentResolver()).getCount();
-
-
-        BarberSelection barberSelection = new BarberSelection();
-        barberSelection.nameLike("Jinan");
-        BarberCursor barberCursor = barberSelection.query(getContentResolver());
-        barberCursor.moveToFirst();
-        long avg = barberCursor.getAveragetime();
-        long millis = avg * count;
-        String jinanTime = String.format("%d min",
-                TimeUnit.MILLISECONDS.toMinutes(millis)
-        );
-        marquee.setText("Jinan "+jinanTime);
-        barberCursor.close();*/
-
-
-        //TODO : Update the marquee text with new wait times.
     }
 
 
     /**
      * Adds harcoded barbers.
+     * TODO : Remove this when ready.
      */
     private void updateBarbers()
     {
@@ -229,7 +258,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         this.getContentResolver().insert(BarberColumns.CONTENT_URI, barberContentValues.values());
         barberContentValues.putName("Any barber").putAveragetime(60 * 35 * 1000).putPassword(9999);
         this.getContentResolver().insert(BarberColumns.CONTENT_URI, barberContentValues.values());
-
     }
 
 
@@ -242,24 +270,19 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                if ( direction == ItemTouchHelper.RIGHT  ){
-                    int position = viewHolder.getAdapterPosition();
-/*                    SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage("phoneNo", null, "sms message", null, null);*/
-                    Log.d(TAG, "Item at" + position);
-                    Cursor cursor = adapter.getCursor();
-                    long id = cursor.getLong(0);
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction)
+            {
+                if ( direction == ItemTouchHelper.RIGHT  )
+                {
+                    int adapterPosition = viewHolder.getAdapterPosition();
+                    long id = adapter.getItemId(adapterPosition);
 
-                    //long index = adapter.getCursor()(position);
-                    Log.d(TAG,"Got from adapter "+id);
                     CustomerSelection customerSelection = new CustomerSelection();
                     customerSelection.id(id);
                     int deleted = customerSelection.delete(getContentResolver());
                     Log.d(TAG," rows deleted "+deleted);
                     exitBarberMode();
                 }
-
             }
         };
         itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
@@ -267,15 +290,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         CustomerSelection customerSelection = new CustomerSelection();
         customerSelection.barber(barberId).or().barberNameLike("Any barber").orderBySigned(false);
         CustomerCursor customerCursor = customerSelection.query(getContentResolver());
-        barberButton = (FloatingActionButton )findViewById(R.id.close_barber);
-        barberButton.setVisibility(View.VISIBLE);
-        barberButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                exitBarberMode();
-            }
-        });
+        exitBarberModeButton.setVisibility(View.VISIBLE);
         adapter.swapCursor(customerCursor);
     }
 
@@ -283,6 +298,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         CustomerSelection customerSelection1 = new CustomerSelection().orderBySigned(false);
         adapter.swapCursor(customerSelection1.query(getContentResolver()));
         itemTouchHelper.attachToRecyclerView(null);
-        barberButton.setVisibility(View.INVISIBLE);
+        exitBarberModeButton.setVisibility(View.INVISIBLE);
     }
 }
