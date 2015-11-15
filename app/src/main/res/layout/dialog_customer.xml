@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:weightSum="5">
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/mustache"/>
+    <!--<com.inja.barberside.views.AutoFitTextureView-->
+        <!--android:id="@+id/texture"-->
+        <!--android:layout_width="500dp"-->
+        <!--android:layout_height="500dp"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentTop="true" />-->
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_password"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <EditText
+            android:id="@+id/input_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name_input_hint"
+            android:inputType="text|textCapWords" />
+
+    </android.support.design.widget.TextInputLayout>
+    <Spinner
+        android:id="@+id/barber_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp" />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <EditText
+            android:id="@+id/input_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="If you add a phone number, we will text you when it's close to your turn"
+            android:inputType="phone" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+</LinearLayout>

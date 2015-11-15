@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.inja.barberside.provider.barber.BarberColumns;
 import com.inja.barberside.provider.base.AbstractSelection;
 
 /**
@@ -116,33 +117,33 @@ public class CustomerSelection extends AbstractSelection<CustomerSelection> {
         return this;
     }
 
-    public CustomerSelection barber(String... value) {
-        addEquals(CustomerColumns.BARBER, value);
+    public CustomerSelection barber(long... value) {
+        addEquals(CustomerColumns.BARBER, toObjectArray(value));
         return this;
     }
 
-    public CustomerSelection barberNot(String... value) {
-        addNotEquals(CustomerColumns.BARBER, value);
+    public CustomerSelection barberNot(long... value) {
+        addNotEquals(CustomerColumns.BARBER, toObjectArray(value));
         return this;
     }
 
-    public CustomerSelection barberLike(String... value) {
-        addLike(CustomerColumns.BARBER, value);
+    public CustomerSelection barberGt(long value) {
+        addGreaterThan(CustomerColumns.BARBER, value);
         return this;
     }
 
-    public CustomerSelection barberContains(String... value) {
-        addContains(CustomerColumns.BARBER, value);
+    public CustomerSelection barberGtEq(long value) {
+        addGreaterThanOrEquals(CustomerColumns.BARBER, value);
         return this;
     }
 
-    public CustomerSelection barberStartsWith(String... value) {
-        addStartsWith(CustomerColumns.BARBER, value);
+    public CustomerSelection barberLt(long value) {
+        addLessThan(CustomerColumns.BARBER, value);
         return this;
     }
 
-    public CustomerSelection barberEndsWith(String... value) {
-        addEndsWith(CustomerColumns.BARBER, value);
+    public CustomerSelection barberLtEq(long value) {
+        addLessThanOrEquals(CustomerColumns.BARBER, value);
         return this;
     }
 
@@ -153,6 +154,126 @@ public class CustomerSelection extends AbstractSelection<CustomerSelection> {
 
     public CustomerSelection orderByBarber() {
         orderBy(CustomerColumns.BARBER, false);
+        return this;
+    }
+
+    public CustomerSelection barberName(String... value) {
+        addEquals(BarberColumns.NAME, value);
+        return this;
+    }
+
+    public CustomerSelection barberNameNot(String... value) {
+        addNotEquals(BarberColumns.NAME, value);
+        return this;
+    }
+
+    public CustomerSelection barberNameLike(String... value) {
+        addLike(BarberColumns.NAME, value);
+        return this;
+    }
+
+    public CustomerSelection barberNameContains(String... value) {
+        addContains(BarberColumns.NAME, value);
+        return this;
+    }
+
+    public CustomerSelection barberNameStartsWith(String... value) {
+        addStartsWith(BarberColumns.NAME, value);
+        return this;
+    }
+
+    public CustomerSelection barberNameEndsWith(String... value) {
+        addEndsWith(BarberColumns.NAME, value);
+        return this;
+    }
+
+    public CustomerSelection orderByBarberName(boolean desc) {
+        orderBy(BarberColumns.NAME, desc);
+        return this;
+    }
+
+    public CustomerSelection orderByBarberName() {
+        orderBy(BarberColumns.NAME, false);
+        return this;
+    }
+
+    public CustomerSelection barberAveragetime(long... value) {
+        addEquals(BarberColumns.AVERAGETIME, toObjectArray(value));
+        return this;
+    }
+
+    public CustomerSelection barberAveragetimeNot(long... value) {
+        addNotEquals(BarberColumns.AVERAGETIME, toObjectArray(value));
+        return this;
+    }
+
+    public CustomerSelection barberAveragetimeGt(long value) {
+        addGreaterThan(BarberColumns.AVERAGETIME, value);
+        return this;
+    }
+
+    public CustomerSelection barberAveragetimeGtEq(long value) {
+        addGreaterThanOrEquals(BarberColumns.AVERAGETIME, value);
+        return this;
+    }
+
+    public CustomerSelection barberAveragetimeLt(long value) {
+        addLessThan(BarberColumns.AVERAGETIME, value);
+        return this;
+    }
+
+    public CustomerSelection barberAveragetimeLtEq(long value) {
+        addLessThanOrEquals(BarberColumns.AVERAGETIME, value);
+        return this;
+    }
+
+    public CustomerSelection orderByBarberAveragetime(boolean desc) {
+        orderBy(BarberColumns.AVERAGETIME, desc);
+        return this;
+    }
+
+    public CustomerSelection orderByBarberAveragetime() {
+        orderBy(BarberColumns.AVERAGETIME, false);
+        return this;
+    }
+
+    public CustomerSelection barberPassword(int... value) {
+        addEquals(BarberColumns.PASSWORD, toObjectArray(value));
+        return this;
+    }
+
+    public CustomerSelection barberPasswordNot(int... value) {
+        addNotEquals(BarberColumns.PASSWORD, toObjectArray(value));
+        return this;
+    }
+
+    public CustomerSelection barberPasswordGt(int value) {
+        addGreaterThan(BarberColumns.PASSWORD, value);
+        return this;
+    }
+
+    public CustomerSelection barberPasswordGtEq(int value) {
+        addGreaterThanOrEquals(BarberColumns.PASSWORD, value);
+        return this;
+    }
+
+    public CustomerSelection barberPasswordLt(int value) {
+        addLessThan(BarberColumns.PASSWORD, value);
+        return this;
+    }
+
+    public CustomerSelection barberPasswordLtEq(int value) {
+        addLessThanOrEquals(BarberColumns.PASSWORD, value);
+        return this;
+    }
+
+    public CustomerSelection orderByBarberPassword(boolean desc) {
+        orderBy(BarberColumns.PASSWORD, desc);
+        return this;
+    }
+
+    public CustomerSelection orderByBarberPassword() {
+        orderBy(BarberColumns.PASSWORD, false);
         return this;
     }
 

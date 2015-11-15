@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.inja.barberside.provider.barber.BarberColumns;
 import com.inja.barberside.provider.base.AbstractCursor;
 
 /**
@@ -38,13 +39,43 @@ public class CustomerCursor extends AbstractCursor implements CustomerModel {
 
     /**
      * Barber
+     */
+    public long getBarber() {
+        Long res = getLongOrNull(CustomerColumns.BARBER);
+        if (res == null)
+            throw new NullPointerException("The value of 'barber' in the database was null, which is not allowed according to the model definition");
+        return res;
+    }
+
+    /**
+     * Name
      * Cannot be {@code null}.
      */
     @NonNull
-    public String getBarber() {
-        String res = getStringOrNull(CustomerColumns.BARBER);
+    public String getBarberName() {
+        String res = getStringOrNull(BarberColumns.NAME);
         if (res == null)
-            throw new NullPointerException("The value of 'barber' in the database was null, which is not allowed according to the model definition");
+            throw new NullPointerException("The value of 'name' in the database was null, which is not allowed according to the model definition");
+        return res;
+    }
+
+    /**
+     * Work average
+     */
+    public long getBarberAveragetime() {
+        Long res = getLongOrNull(BarberColumns.AVERAGETIME);
+        if (res == null)
+            throw new NullPointerException("The value of 'averagetime' in the database was null, which is not allowed according to the model definition");
+        return res;
+    }
+
+    /**
+     * Password
+     */
+    public int getBarberPassword() {
+        Integer res = getIntegerOrNull(BarberColumns.PASSWORD);
+        if (res == null)
+            throw new NullPointerException("The value of 'password' in the database was null, which is not allowed according to the model definition");
         return res;
     }
 

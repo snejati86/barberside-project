@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import com.inja.barberside.provider.CustomerProvider;
+import com.inja.barberside.provider.barber.BarberColumns;
 
 /**
  * This class represents a customer
@@ -20,7 +21,7 @@ public class CustomerColumns implements BaseColumns {
     /**
      * Name
      */
-    public static final String NAME = "Name";
+    public static final String NAME = "customer__name";
 
     /**
      * Barber
@@ -49,6 +50,7 @@ public class CustomerColumns implements BaseColumns {
             SIGNED
     };
     // @formatter:on
+    public static final String PREFIX_BARBER = TABLE_NAME + "__" + BarberColumns.TABLE_NAME;
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
@@ -60,5 +62,4 @@ public class CustomerColumns implements BaseColumns {
         }
         return false;
     }
-
 }

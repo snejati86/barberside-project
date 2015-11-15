@@ -1,26 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="2" tools:context=".MainActivity">
+    android:weightSum="2"
+    tools:context=".MainActivity">
     <LinearLayout
         android:id="@+id/logo_container"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight=".3"
-        android:background="@color/colorAccent"
+        android:background="#6472bc"
         android:gravity="center"
         android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/logo"/>
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/logo"/>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="10dp"
+
+                android:src="@drawable/ic_add_black"
+                app:backgroundTint="#ae1111"
+                />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/keypad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="10dp"
+
+                android:src="@drawable/keypad"
+                app:backgroundTint="#276eac"
+                />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/close_barber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/keypad"
+                android:visibility="gone"
+                app:backgroundTint="#42e929"
+                />
+
+        </FrameLayout>
+
     </LinearLayout>
-<!--    <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_recycler_view"
-        android:scrollbars="vertical"
-        android:layout_weight="1.7"
+
+    <TextView
+        android:id="@+id/marquee_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#000"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:fontFamily="sans-serif"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textColor="#fff"
+        android:textSize="30sp"/>
+    <TextView
+        android:id="@+id/wait_count"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-thin"
+        android:text="0 Souls waiting"
+        android:textAlignment="center"
+        android:textColor="#642a2a"
+        android:textSize="50sp"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/customer_list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"/>-->
+        android:layout_height="0dp"
+        android:layout_weight="1.6"
+        android:scrollbars="vertical"/>
 </LinearLayout>

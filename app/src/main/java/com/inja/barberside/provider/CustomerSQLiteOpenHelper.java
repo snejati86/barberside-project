@@ -10,18 +10,27 @@ import android.os.Build;
 import android.util.Log;
 
 import com.inja.barberside.BuildConfig;
+import com.inja.barberside.provider.barber.BarberColumns;
 import com.inja.barberside.provider.customer.CustomerColumns;
 
 public class CustomerSQLiteOpenHelper extends SQLiteOpenHelper {
     public static final String DATABASE_FILE_NAME = "customer.db";
     // @formatter:off
+    public static final String SQL_CREATE_TABLE_BARBER = "CREATE TABLE IF NOT EXISTS "
+            + BarberColumns.TABLE_NAME + " ( "
+            + BarberColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + BarberColumns.NAME + " TEXT NOT NULL, "
+            + BarberColumns.AVERAGETIME + " INTEGER NOT NULL, "
+            + BarberColumns.PASSWORD + " INTEGER NOT NULL "
+            + " );";
     public static final String SQL_CREATE_TABLE_CUSTOMER = "CREATE TABLE IF NOT EXISTS "
             + CustomerColumns.TABLE_NAME + " ( "
             + CustomerColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + CustomerColumns.NAME + " TEXT NOT NULL, "
-            + CustomerColumns.BARBER + " TEXT NOT NULL, "
+            + CustomerColumns.BARBER + " INTEGER NOT NULL, "
             + CustomerColumns.PHONE + " INTEGER, "
             + CustomerColumns.SIGNED + " INTEGER NOT NULL "
+            + ", CONSTRAINT fk_barber FOREIGN KEY (" + CustomerColumns.BARBER + ") REFERENCES barber (_id) ON DELETE CASCADE"
             + " );";
     private static final String TAG = CustomerSQLiteOpenHelper.class.getSimpleName();
     private static final int DATABASE_VERSION = 1;
@@ -80,6 +89,7 @@ public class CustomerSQLiteOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
         mOpenHelperCallbacks.onPreCreate(mContext, db);
+        db.execSQL(SQL_CREATE_TABLE_BARBER);
         db.execSQL(SQL_CREATE_TABLE_CUSTOMER);
         mOpenHelperCallbacks.onPostCreate(mContext, db);
     }
