@@ -29,6 +29,9 @@ import com.inja.barberside.provider.customer.CustomerSelection;
 import java.lang.reflect.Field;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> ,BarberList{
 
     /**
@@ -44,32 +47,38 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     /**
      * Recycler view.
      */
-    private RecyclerView recyclerView;
+    @Bind(R.id.customer_list)
+    RecyclerView recyclerView;
 
     /**
      * Marquee to display the name of barbers.
      */
-    private TextView marquee;
+    @Bind(R.id.marquee_text)
+    TextView marquee;
 
     /**
      * Total number of people waiting.
      */
-    private TextView waitingCount;
+    @Bind(R.id.wait_count)
+    TextView waitingCount;
 
     /**
      * Button to exit barber mode.
      */
-    private FloatingActionButton exitBarberModeButton;
+    @Bind(R.id.close_barber)
+    FloatingActionButton exitBarberModeButton;
 
     /**
      * Button to add customer;
      */
-    private FloatingActionButton addCustomerButton;
+    @Bind(R.id.fab)
+    FloatingActionButton addCustomerButton;
 
     /**
      * Key pad
      */
-    private FloatingActionButton enterBarberModeButton;
+    @Bind(R.id.keypad)
+    FloatingActionButton enterBarberModeButton;
 
     /**
      * Custom cursor adapter.
@@ -111,6 +120,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         initUIComponents();
         final Cursor customerCursor = this.getContentResolver().query(CustomerColumns.CONTENT_URI, customerSelection(), null, null, null);
         waitingCount.setText(String.valueOf(customerCursor.getCount())+" Souls waiting");
@@ -122,15 +132,11 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     }
 
     private void initUIComponents() {
-        recyclerView = (RecyclerView) findViewById(R.id.customer_list);
-        marquee = (TextView) findViewById(R.id.marquee_text);
-        waitingCount = (TextView) findViewById(R.id.wait_count);
         marquee.setSelected(true);
         setMarqueeSpeed(marquee, 1000f, true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-
-        addCustomerButton = (FloatingActionButton) findViewById(R.id.fab);
+;
         addCustomerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +144,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
                 customerDialog.show(getFragmentManager(), customerDialog.getClass().getSimpleName());
             }
         });
-        enterBarberModeButton = (FloatingActionButton )findViewById(R.id.keypad);
         enterBarberModeButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -147,7 +152,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
                 keypadDialog.show(getFragmentManager(),keypadDialog.getClass().getSimpleName());
             }
         });
-        exitBarberModeButton = (FloatingActionButton )findViewById(R.id.close_barber);
 
         exitBarberModeButton.setOnClickListener(new View.OnClickListener() {
 
